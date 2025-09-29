@@ -2,147 +2,156 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Doni Bio</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <title>Profile Doni</title>
   <style>
     body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #16222A, #3A6073);
+      background: #0a0f1c;
       color: #fff;
+      font-family: Arial, sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
-      padding: 20px;
+      height: 100vh;
     }
-    .container {
-      background: rgba(0,0,0,0.6);
-      padding: 25px;
+
+    .profile-card {
+      position: relative;
+      width: 400px;
+      padding: 20px;
       border-radius: 20px;
-      width: 380px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+      background: #0d1117;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
       text-align: center;
     }
+
+    .top-right {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #111;
+      border-radius: 12px;
+      padding: 5px;
+      cursor: pointer;
+    }
+
+    #snakeGame {
+      display: none; /* ban đầu ẩn */
+      background: #000;
+      border-radius: 10px;
+    }
+
     .avatar {
-      width: 110px;
-      height: 110px;
+      width: 100px;
+      height: 100px;
       border-radius: 50%;
-      border: 3px solid #fff;
       margin-bottom: 15px;
     }
-    .name {
+
+    .game-icon {
       font-size: 24px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-    .desc {
-      font-size: 14px;
-      color: #ccc;
-      margin-bottom: 20px;
-    }
-    .cards {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      margin-bottom: 20px;
-    }
-    .card {
-      background: rgba(255,255,255,0.05);
-      border-radius: 12px;
-      overflow: hidden;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    .card:hover {
-      background: rgba(255,255,255,0.15);
-    }
-    .card h3 {
-      margin: 0;
-      padding: 15px;
-      font-size: 18px;
-      color: #fff;
-    }
-    .card-content {
-      max-height: 0;
-      overflow: hidden;
-      padding: 0 15px;
-      color: #ccc;
-      font-size: 15px;
-      transition: max-height 0.4s ease, padding 0.3s ease;
-    }
-    .card.open .card-content {
-      max-height: 200px; /* cao vừa đủ để hiện text */
-      padding: 10px 15px 15px;
-    }
-    .icons {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-    }
-    .icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: 0.3s;
-    }
-    .icon i {
-      font-size: 20px;
-      color: #fff;
-    }
-    .icon:hover {
-      background: rgba(255,255,255,0.3);
-      transform: scale(1.1);
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <img src="https://raw.githubusercontent.com/DONI1610/doni/main/ảnh%20nền.png" alt="Avatar" class="avatar">
-    <div class="name">Doni</div>
-    <div class="desc">Em đi qua đời tôi như cơn mưa đầu hạ, để lại mảnh trời đầy kỷ niệm chẳng thể phai!</div>
-
-    <div class="cards">
-      <div class="card">
-        <h3>👋 Giới thiệu</h3>
-        <div class="card-content">
-          <p>Mình là Doni, thích chia sẻ và kết nối với mọi người.</p>
-        </div>
-      </div>
-      <div class="card">
-        <h3>🎯 Sở thích</h3>
-        <div class="card-content">
-          <p>Nghe nhạc, chơi game, lái xe dạo phố.</p>
-        </div>
-      </div>
-      <div class="card">
-        <h3>💡 Tài năng</h3>
-        <div class="card-content">
-          <p>Lập trình web, chỉnh sửa code nhanh, sáng tạo ý tưởng.</p>
-        </div>
-      </div>
+  <div class="profile-card">
+    <!-- Ô góc phải -->
+    <div class="top-right" onclick="toggleGame()">
+      <span class="game-icon">🎮</span>
+      <canvas id="snakeGame" width="150" height="150"></canvas>
     </div>
 
-    <div class="icons">
-      <a class="icon" href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-      <a class="icon" href="#" title="TikTok"><i class="fab fa-tiktok"></i></a>
-      <a class="icon" href="#" title="Discord"><i class="fab fa-discord"></i></a>
-      <a class="icon" href="#" title="Mail"><i class="fas fa-envelope"></i></a>
+    <!-- Nội dung profile -->
+    <div class="content">
+      <img src="avatar.jpg" alt="Avatar" class="avatar">
+      <h2>Doni</h2>
+      <p>Em đi qua đời tôi như cơn mưa đầu hạ,<br> để lại mảnh trời đầy kỷ niệm chẳng thể phai!</p>
     </div>
   </div>
 
   <script>
-    // Bấm vào card để ẩn/hiện nội dung
-    document.querySelectorAll('.card').forEach(card => {
-      card.addEventListener('click', () => {
-        card.classList.toggle('open');
-      });
+    const canvas = document.getElementById("snakeGame");
+    const ctx = canvas.getContext("2d");
+    let game;
+    let box = 10;
+    let snake, direction, food;
+
+    function initGame() {
+      snake = [{ x: 7 * box, y: 7 * box }];
+      direction = null;
+      food = {
+        x: Math.floor(Math.random() * (canvas.width / box)) * box,
+        y: Math.floor(Math.random() * (canvas.height / box)) * box
+      };
+      if (game) clearInterval(game);
+      game = setInterval(draw, 100);
+    }
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowUp" && direction !== "DOWN") direction = "UP";
+      else if (event.key === "ArrowDown" && direction !== "UP") direction = "DOWN";
+      else if (event.key === "ArrowLeft" && direction !== "RIGHT") direction = "LEFT";
+      else if (event.key === "ArrowRight" && direction !== "LEFT") direction = "RIGHT";
     });
+
+    function draw() {
+      ctx.fillStyle = "#000";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Vẽ rắn
+      for (let i = 0; i < snake.length; i++) {
+        ctx.fillStyle = i === 0 ? "lime" : "green";
+        ctx.fillRect(snake[i].x, snake[i].y, box, box);
+      }
+
+      // Vẽ mồi
+      ctx.fillStyle = "red";
+      ctx.fillRect(food.x, food.y, box, box);
+
+      // Tọa độ đầu
+      let snakeX = snake[0].x;
+      let snakeY = snake[0].y;
+
+      if (direction === "UP") snakeY -= box;
+      if (direction === "DOWN") snakeY += box;
+      if (direction === "LEFT") snakeX -= box;
+      if (direction === "RIGHT") snakeX += box;
+
+      // Ăn mồi
+      if (snakeX === food.x && snakeY === food.y) {
+        food = {
+          x: Math.floor(Math.random() * (canvas.width / box)) * box,
+          y: Math.floor(Math.random() * (canvas.height / box)) * box
+        };
+      } else {
+        snake.pop();
+      }
+
+      let newHead = { x: snakeX, y: snakeY };
+
+      // Game over
+      if (
+        snakeX < 0 || snakeY < 0 ||
+        snakeX >= canvas.width || snakeY >= canvas.height ||
+        snake.some((s) => s.x === newHead.x && s.y === newHead.y)
+      ) {
+        clearInterval(game);
+        alert("Game Over!");
+      }
+
+      snake.unshift(newHead);
+    }
+
+    function toggleGame() {
+      if (canvas.style.display === "none") {
+        canvas.style.display = "block";
+        document.querySelector(".game-icon").style.display = "none";
+        initGame();
+      } else {
+        canvas.style.display = "none";
+        document.querySelector(".game-icon").style.display = "inline";
+        clearInterval(game);
+      }
+    }
   </script>
 </body>
 </html>
