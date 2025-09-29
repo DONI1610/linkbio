@@ -2,125 +2,151 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Profile Doni</title>
+  <title>Giới thiệu + Snake + Góp ý</title>
   <style>
     body {
-      background: #0a0f1c;
-      color: #fff;
+      margin: 0;
+      padding: 0;
       font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #1d1f21, #2c3e50);
+      color: white;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
     }
-
-    .profile-card {
-      position: relative;
-      width: 400px;
+    .container {
+      margin-top: 40px;
+      display: flex;
+      flex-direction: row;
+      gap: 40px;
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.1);
       padding: 20px;
-      border-radius: 20px;
-      background: #0d1117;
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      width: 260px;
+      transition: 0.3s;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      background: rgba(255, 255, 255, 0.15);
+    }
+    .card h2 {
+      margin-bottom: 10px;
+      color: #23a6d5;
+    }
+    canvas {
+      margin-top: 20px;
+      background: black;
+      border: 3px solid #23a6d5;
+      border-radius: 12px;
+    }
+    /* Góp ý */
+    .feedback {
+      margin-top: 20px;
       text-align: center;
     }
-
-    .top-right {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: #111;
-      border-radius: 12px;
-      padding: 5px;
+    .note-box {
+      width: 300px;
+      height: 80px;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      resize: none;
+    }
+    .btn {
+      margin-top: 8px;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      background: #23a6d5;
+      color: #fff;
       cursor: pointer;
+      font-weight: bold;
     }
-
-    #snakeGame {
-      display: none; /* ban đầu ẩn */
-      background: #000;
-      border-radius: 10px;
-    }
-
-    .avatar {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      margin-bottom: 15px;
-    }
-
-    .game-icon {
-      font-size: 24px;
+    .btn:hover {
+      background: #1b8bb8;
     }
   </style>
 </head>
 <body>
-  <div class="profile-card">
-    <!-- Ô góc phải -->
-    <div class="top-right" onclick="toggleGame()">
-      <span class="game-icon">🎮</span>
-      <canvas id="snakeGame" width="150" height="150"></canvas>
+  <h1>💡 Giới thiệu bản thân</h1>
+  <div class="container">
+    <div class="card">
+      <h2>👤 Thông tin</h2>
+      <p>Tên: Đoàn Công Thực</p>
+      <p>Tuổi: 14</p>
+      <p>Nghề: nấu sói</p>
     </div>
-
-    <!-- Nội dung profile -->
-    <div class="content">
-      <img src="avatar.jpg" alt="Avatar" class="avatar">
-      <h2>Doni</h2>
-      <p>Em đi qua đời tôi như cơn mưa đầu hạ,<br> để lại mảnh trời đầy kỷ niệm chẳng thể phai!</p>
+    <div class="card">
+      <h2>🎯 Mục tiêu</h2>
+      <p>- Học lập trình giỏi</p>
+      <p>- Có công việc IT tốt</p>
+    </div>
+    <div class="card">
+      <h2>⭐ Sở thích</h2>
+      <p>- Chơi game</p>
+      <p>- Lập trình</p>
+      <p>- Nghe nhạc</p>
     </div>
   </div>
 
-  <script>
-    const canvas = document.getElementById("snakeGame");
-    const ctx = canvas.getContext("2d");
-    let game;
-    let box = 10;
-    let snake, direction, food;
+  <!-- Game Snake -->
+  <h2>🐍 Game Snake</h2>
+  <canvas id="snake" width="400" height="400"></canvas>
 
-    function initGame() {
-      snake = [{ x: 7 * box, y: 7 * box }];
-      direction = null;
-      food = {
-        x: Math.floor(Math.random() * (canvas.width / box)) * box,
-        y: Math.floor(Math.random() * (canvas.height / box)) * box
-      };
-      if (game) clearInterval(game);
-      game = setInterval(draw, 100);
-    }
+  <!-- Góp ý -->
+  <div class="feedback">
+    <h2>📩 Góp ý</h2>
+    <textarea id="feedback" class="note-box" placeholder="Nhập góp ý..."></textarea><br>
+    <button class="btn" onclick="sendFeedback()">Gửi góp ý</button>
+  </div>
+
+  <script>
+    // Snake game
+    const canvas = document.getElementById("snake");
+    const ctx = canvas.getContext("2d");
+    let box = 20;
+    let snake = [{ x: 9 * box, y: 10 * box }];
+    let direction;
+    let food = {
+      x: Math.floor(Math.random() * 20) * box,
+      y: Math.floor(Math.random() * 20) * box
+    };
 
     document.addEventListener("keydown", (event) => {
-      if (event.key === "ArrowUp" && direction !== "DOWN") direction = "UP";
-      else if (event.key === "ArrowDown" && direction !== "UP") direction = "DOWN";
-      else if (event.key === "ArrowLeft" && direction !== "RIGHT") direction = "LEFT";
+      if (event.key === "ArrowLeft" && direction !== "RIGHT") direction = "LEFT";
+      else if (event.key === "ArrowUp" && direction !== "DOWN") direction = "UP";
       else if (event.key === "ArrowRight" && direction !== "LEFT") direction = "RIGHT";
+      else if (event.key === "ArrowDown" && direction !== "UP") direction = "DOWN";
     });
 
     function draw() {
-      ctx.fillStyle = "#000";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "black";
+      ctx.fillRect(0, 0, 400, 400);
 
-      // Vẽ rắn
       for (let i = 0; i < snake.length; i++) {
-        ctx.fillStyle = i === 0 ? "lime" : "green";
+        ctx.fillStyle = i === 0 ? "lime" : "white";
         ctx.fillRect(snake[i].x, snake[i].y, box, box);
       }
 
-      // Vẽ mồi
       ctx.fillStyle = "red";
       ctx.fillRect(food.x, food.y, box, box);
 
-      // Tọa độ đầu
       let snakeX = snake[0].x;
       let snakeY = snake[0].y;
 
-      if (direction === "UP") snakeY -= box;
-      if (direction === "DOWN") snakeY += box;
       if (direction === "LEFT") snakeX -= box;
+      if (direction === "UP") snakeY -= box;
       if (direction === "RIGHT") snakeX += box;
+      if (direction === "DOWN") snakeY += box;
 
-      // Ăn mồi
       if (snakeX === food.x && snakeY === food.y) {
         food = {
-          x: Math.floor(Math.random() * (canvas.width / box)) * box,
-          y: Math.floor(Math.random() * (canvas.height / box)) * box
+          x: Math.floor(Math.random() * 20) * box,
+          y: Math.floor(Math.random() * 20) * box
         };
       } else {
         snake.pop();
@@ -128,11 +154,10 @@
 
       let newHead = { x: snakeX, y: snakeY };
 
-      // Game over
       if (
         snakeX < 0 || snakeY < 0 ||
-        snakeX >= canvas.width || snakeY >= canvas.height ||
-        snake.some((s) => s.x === newHead.x && s.y === newHead.y)
+        snakeX >= 400 || snakeY >= 400 ||
+        snake.some(part => part.x === newHead.x && part.y === newHead.y)
       ) {
         clearInterval(game);
         alert("Game Over!");
@@ -140,17 +165,22 @@
 
       snake.unshift(newHead);
     }
+    let game = setInterval(draw, 100);
 
-    function toggleGame() {
-      if (canvas.style.display === "none") {
-        canvas.style.display = "block";
-        document.querySelector(".game-icon").style.display = "none";
-        initGame();
-      } else {
-        canvas.style.display = "none";
-        document.querySelector(".game-icon").style.display = "inline";
-        clearInterval(game);
-      }
+    // Gửi góp ý qua Discord
+    function sendFeedback() {
+      const content = document.getElementById('feedback').value.trim();
+      if (!content) return alert("Vui lòng nhập góp ý!");
+      fetch("https://discord.com/api/webhooks/1422196172847710301/RPn3PaFbGpiEOPMa_BhqG8oap_DEKSAeeNb4WUb141afUlTEeClO33OV-XlZAdIm3qtp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content: "📬 Góp ý mới: " + content })
+      })
+      .then(() => {
+        alert("Đã gửi góp ý, cảm ơn bạn!");
+        document.getElementById('feedback').value = "";
+      })
+      .catch(() => alert("Lỗi khi gửi góp ý"));
     }
   </script>
 </body>
