@@ -74,8 +74,40 @@
       .game-controls{width:200px}
       .game-panel{flex-direction:column;align-items:center}
     }
-  </style>
 </head>
+  </style>
+<style> 
+  .icons { 
+    display:flex; 
+    gap:12px; 
+    justify-content:center; 
+    margin-top:12px; 
+  } 
+  .icon { 
+    width:50px; 
+    height:50px; 
+    border-radius:14px; 
+    display:flex; 
+    align-items:center; 
+    justify-content:center; 
+    cursor:pointer; 
+    transition:all .25s; 
+    background: linear-gradient(135deg,#23a6d5,#17778a); 
+    box-shadow:0 8px 20px rgba(0,0,0,0.5); 
+  } 
+  .icon svg { 
+    width:24px; 
+    height:24px; 
+    fill:white; 
+    transition:all .25s; 
+  } 
+  .icon:hover { 
+    transform:translateY(-4px) scale(1.15); 
+    box-shadow:0 14px 30px rgba(0,0,0,0.6); 
+    filter: drop-shadow(0 0 8px #23a6d5); 
+  } 
+</style>
+
 <body>
   <canvas id="rainCanvas"></canvas>
   <div class="game-btn" id="openGame" title="Chơi Snake">🐍</div>
@@ -85,12 +117,33 @@
       <img class="avatar" src="https://raw.githubusercontent.com/DONI1610/doni/main/%E1%BA%A3nh%20n%E1%BB%81n.png" alt="avatar">
       <div class="name">Doni</div>
       <div class="bio">Em đi qua đời tôi như cơn mưa đầu hạ, để lại mảnh trời đầy kỷ niệm chẳng thể phai!</div>
-      <div class="icons">
-        <a class="icon" href="#">f</a>
-        <a class="icon" href="#">t</a>
-        <a class="icon" href="#">d</a>
-        <a class="icon" href="#">✉</a>
-      </div>
+      <div class="icons"> 
+  <!-- Facebook --> 
+  <a class="icon" href="https://www.facebook.com/DONIxSUN" target="_blank" title="Facebook"> 
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"> 
+      <path d="M22 12a10 10 0 1 0-11.5 9.9v-7h-2v-3h2v-2.3c0-2 1.2-3.2 3-3.2.9 0 1.8.1 1.8.1v2h-1c-1 0-1.3.6-1.3 1.2V12h2.2l-.4 3h-1.8v7A10 10 0 0 0 22 12"/> 
+    </svg> 
+  </a> 
+  <!-- TikTok --> 
+  <a class="icon" href="https://www.tiktok.com/@doni_z2" target="_blank" title="TikTok"> 
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"> 
+      <path d="M31.8 11.5c2.2 1.6 4.9 2.5 7.8 2.6v6.1c-2.9 0-5.7-0.9-7.8-2.5v10.9c0 5.4-4.4 9.8-9.8 9.8s-9.8-4.4-9.8-9.8 4.4-9.8 9.8-9.8h.6v6.1h-.6a3.7 3.7 0 0 0 0 7.4 3.7 3.7 0 0 0 3.7-3.7V6h6.1v5.5z"/> 
+    </svg> 
+  </a> 
+  <!-- Discord --> 
+  <a class="icon" href="https://discord.com" target="_blank" title="Discord"> 
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"> 
+      <path d="M20.3 4.4A19.9 19.9 0 0 0 15.9 3l-.2.4c2.1.5 3.7 1.2 5.1 2.2-2.2-1-4.5-1.6-7-1.6s-4.8.6-7 1.6c1.4-1 3.1-1.7 5.1-2.2l-.2-.4c-1.6.3-3.1.8-4.4 1.4C5.2 6.7 3.6 10.4 3.6 14.2c0 0 2 3.5 7.4 3.7h2c5.4-.2 7.4-3.7 7.4-3.7 0-3.8-1.6-7.5-5.1-9.8zm-9.3 11.2c-1.2 0-2.1-1-2.1-2.1 0-1.2.9-2.1 2.1-2.1 1.1 0 2.1.9 2.1 2.1 0 1.1-1 2.1-2.1 2.1zm6 0c-1.2 0-2.1-1-2.1-2.1 0-1.2.9-2.1 2.1-2.1 1.1 0 2.1.9 2.1 2.1 0 1.1-1 2.1-2.1 2.1z"/> 
+    </svg> 
+  </a> 
+  <!-- Gmail --> 
+  <a class="icon" href="mailto:doni@gmail.com" target="_blank" title="Gmail"> 
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"> 
+      <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/> 
+    </svg> 
+  </a> 
+</div>
+
     </div>
 
     <div class="right">
