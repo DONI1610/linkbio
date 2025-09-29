@@ -1,209 +1,194 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <title>Website cá nhân</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Bio + Snake Game</title>
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0d1117;
-      color: white;
+    :root{
+      --glass-bg: rgba(0,0,0,0.5);
+      --accent: #23a6d5;
+      --soft: rgba(255,255,255,0.12);
     }
-    header {
-      padding: 20px;
-      background: #161b22;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,Arial,sans-serif;background:#111;overflow:hidden}
+    body{
+      display:flex;align-items:center;justify-content:center;
+      background: linear-gradient(135deg,#0f2336 0%, #102a3c 40%, #334e5f 100%);
+      background-size: 400% 400%;
+      animation: bg 18s ease infinite;
     }
-    header h1 {
-      margin: 0;
-      font-size: 22px;
+    @keyframes bg{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+    #rainCanvas{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+    .card{
+      position:relative;z-index:2;
+      width:820px;max-width:95%;
+      background:var(--glass-bg);
+      border-radius:22px;
+      padding:28px;
+      box-shadow:0 12px 30px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+      backdrop-filter: blur(8px);
+      display:flex;gap:20px;align-items:flex-start;
+      color:#fff;
     }
-    .socials a {
-      margin-left: 15px;
-      color: white;
-      text-decoration: none;
-      font-size: 20px;
-      transition: 0.3s;
+    .left{width:260px;text-align:center;}
+    .avatar{
+      width:150px;height:150px;border-radius:50%;object-fit:cover;border:4px solid rgba(255,255,255,0.12);
+      box-shadow:0 6px 18px rgba(0,0,0,0.6);
     }
-    .socials a:hover {
-      color: #23a6d5;
+    .name{font-size:36px;margin:12px 0 6px;font-weight:700;letter-spacing:0.5px}
+    .bio{opacity:0.9;color:rgba(255,255,255,0.85);line-height:1.5}
+    .right{flex:1}
+    .icons{margin-top:8px;display:flex;gap:10px;justify-content:center}
+    .icon{
+      width:44px;height:44px;border-radius:10px;background:var(--soft);display:inline-flex;align-items:center;justify-content:center;
+      box-shadow:0 6px 18px rgba(0,0,0,0.4);cursor:pointer;transition:all .18s;
     }
-    .container {
-      display: flex;
-      padding: 20px;
+    .icon:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(0,0,0,0.5)}
+    .game-btn{
+      position:fixed;right:22px;top:18px;z-index:3;
+      width:56px;height:56px;border-radius:12px;background:linear-gradient(180deg,var(--accent),#17778a);
+      display:flex;align-items:center;justify-content:center;color:white;font-weight:700;cursor:pointer;
+      box-shadow:0 10px 30px rgba(0,0,0,0.5), inset 0 -2px 6px rgba(255,255,255,0.06);
+      transition:transform .15s;
     }
-    .left {
-      flex: 2;
+    .game-btn:hover{transform:translateY(-5px) scale(1.02)}
+    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:10;
+      background:linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.65));}
+    .modal.open{display:flex}
+    .game-panel{
+      width:640px;max-width:95%;background:rgba(10,12,15,0.95);border-radius:14px;padding:18px;box-shadow:0 30px 80px rgba(0,0,0,0.7);
+      display:flex;gap:16px;align-items:flex-start;
     }
-    .right {
-      flex: 1;
-      margin-left: 20px;
-      background: #161b22;
-      padding: 15px;
-      border-radius: 10px;
-    }
-    canvas {
-      background: #111;
-      display: block;
-      margin: 20px auto;
-      border: 2px solid #23a6d5;
-    }
-    button {
-      border: 0;
-      border-radius: 8px;
-      padding: 10px;
-      background: linear-gradient(135deg,#23a6d5,#17778a);
-      color: white;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    textarea {
-      width: 100%;
-      min-height: 80px;
-      padding: 10px;
-      border-radius: 8px;
-      border: 0;
-      resize: none;
-      font-family: inherit;
-      font-size: 14px;
-      background: rgba(255,255,255,0.08);
-      color: #fff;
-      outline: none;
-    }
-    #feedbackStatus {
-      margin-top: 6px;
-      font-size: 13px;
-      opacity: 0.85;
+    .game-canvas{background:#0b1216;border-radius:8px;box-shadow:inset 0 3px 8px rgba(255,255,255,0.02);display:block}
+    .game-controls{width:260px;color:#fff}
+    .game-controls h3{margin:0 0 12px;font-size:20px}
+    .ctrl-row{display:flex;gap:8px;margin-bottom:10px}
+    .ctrl-row button{flex:1;padding:10px;border-radius:10px;border:0;background:var(--accent);color:#fff;cursor:pointer}
+    .small{font-size:13px;opacity:0.9}
+    .close-btn{background:transparent;border:0;color:#fff;font-size:20px;cursor:pointer;position:absolute;right:26px;top:18px}
+    @media (max-width:880px){
+      .card{flex-direction:column;align-items:center;padding:18px}
+      .left,.right{width:100%}
+      .game-controls{width:200px}
+      .game-panel{flex-direction:column;align-items:center}
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>🐍 Game & Góp ý</h1>
-    <div class="socials">
-      <a href="https://facebook.com/" target="_blank">📘</a>
-      <a href="https://tiktok.com/" target="_blank">🎵</a>
-      <a href="https://youtube.com/" target="_blank">▶️</a>
-    </div>
-  </header>
+  <canvas id="rainCanvas"></canvas>
+  <div class="game-btn" id="openGame" title="Chơi Snake">🐍</div>
 
-  <div class="container">
+  <div class="card" role="main">
     <div class="left">
-      <h2>🎮 Snake Game</h2>
-      <canvas id="gameCanvas" width="400" height="400"></canvas>
-      <p>Điều khiển bằng phím mũi tên ⬅️⬆️➡️⬇️</p>
+      <img class="avatar" src="https://raw.githubusercontent.com/DONI1610/doni/main/%E1%BA%A3nh%20n%E1%BB%81n.png" alt="avatar">
+      <div class="name">Doni</div>
+      <div class="bio">Em đi qua đời tôi như cơn mưa đầu hạ, để lại mảnh trời đầy kỷ niệm chẳng thể phai!</div>
+      <div class="icons">
+        <a class="icon" href="#">f</a>
+        <a class="icon" href="#">t</a>
+        <a class="icon" href="#">d</a>
+        <a class="icon" href="#">✉</a>
+      </div>
     </div>
 
     <div class="right">
-      <div style="font-size:18px;font-weight:700;margin-bottom:12px">💬 Góp ý</div>
-      <textarea id="feedbackInput" placeholder="Nhập góp ý của bạn..."></textarea>
-      <button id="sendFeedback">Gửi góp ý</button>
-      <div id="feedbackStatus"></div>
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div style="font-size:18px;font-weight:700">Góp ý cho Doni</div>
+        <div style="opacity:0.85">📍 Việt Nam</div>
+      </div>
+
+      <!-- Box góp ý -->
+      <div style="margin-top:18px;padding:14px;background:rgba(255,255,255,0.02);border-radius:12px">
+        <div style="font-size:16px;font-weight:600;margin-bottom:8px">💬 Góp ý</div>
+        <textarea id="feedbackInput" placeholder="Nhập góp ý của bạn..." 
+          style="width:100%;min-height:70px;padding:8px;border-radius:8px;border:0;resize:none;
+                 background:rgba(255,255,255,0.08);color:#fff;font-family:inherit"></textarea>
+        <button id="sendFeedback" 
+          style="margin-top:10px;width:100%;padding:10px;border:0;border-radius:8px;
+                 background:linear-gradient(135deg,#23a6d5,#17778a);color:#fff;font-weight:600;cursor:pointer">
+          Gửi góp ý
+        </button>
+        <div id="feedbackStatus" style="margin-top:6px;font-size:13px;opacity:0.9"></div>
+      </div>
     </div>
   </div>
 
-  <script>
-    /* ===================== Snake Game ===================== */
-    const canvas = document.getElementById("gameCanvas");
-    const ctx = canvas.getContext("2d");
-    const box = 20;
-    let snake = [{x: 9 * box, y: 10 * box}];
-    let direction;
-    let food = {
-      x: Math.floor(Math.random()*19+1) * box,
-      y: Math.floor(Math.random()*19+1) * box
-    };
+  <div class="modal" id="modalGame" aria-hidden="true">
+    <div class="game-panel" role="dialog" aria-modal="true" aria-label="Snake Game">
+      <canvas id="snakeCanvas" class="game-canvas" width="420" height="420"></canvas>
+      <div class="game-controls">
+        <h3>Snake — Trò chơi</h3>
+        <div class="small">Dùng phím mũi tên hoặc W A S D để điều khiển.</div>
+        <div class="ctrl-row">
+          <button id="btnPlayPause">▶ / ⏸</button>
+          <button id="btnRestart">🔁 Restart</button>
+        </div>
+        <div class="small">Điểm: <span id="score">0</span></div>
+        <div class="small">Tốc độ: <span id="speedVal">8</span> fps</div>
+        <div style="margin-top:12px">
+          <label class="small">Chọn tốc độ:</label>
+          <input id="speed" type="range" min="4" max="20" value="8" style="width:100%;margin-top:6px">
+        </div>
+        <button id="btnClose" style="margin-top:14px;width:100%;background:#333;padding:10px;border-radius:8px;color:#fff">Đóng</button>
+      </div>
+      <button class="close-btn" id="modalClose">✕</button>
+    </div>
+  </div>
 
-    document.addEventListener("keydown", e => {
-      if(e.keyCode == 37 && direction !== "RIGHT") direction = "LEFT";
-      else if(e.keyCode == 38 && direction !== "DOWN") direction = "UP";
-      else if(e.keyCode == 39 && direction !== "LEFT") direction = "RIGHT";
-      else if(e.keyCode == 40 && direction !== "UP") direction = "DOWN";
+<script>
+/* Rain Effect */
+const rainCanvas=document.getElementById('rainCanvas');const rctx=rainCanvas.getContext('2d');
+function resizeRain(){rainCanvas.width=innerWidth;rainCanvas.height=innerHeight;}resizeRain();
+window.addEventListener('resize',resizeRain);
+class Drop{constructor(){this.reset();}reset(){this.x=Math.random()*rainCanvas.width;this.y=Math.random()*rainCanvas.height-rainCanvas.height;this.len=8+Math.random()*18;this.speed=2+Math.random()*4;this.alpha=0.15+Math.random()*0.7;this.color=`rgba(255,60,60,${this.alpha})`;}fall(){this.y+=this.speed;if(this.y>rainCanvas.height+this.len)this.reset();}draw(){rctx.beginPath();rctx.strokeStyle=this.color;rctx.lineWidth=2;rctx.moveTo(this.x,this.y);rctx.lineTo(this.x,this.y+this.len);rctx.stroke();}}
+let drops=[];for(let i=0;i<140;i++)drops.push(new Drop());
+(function rainLoop(){rctx.clearRect(0,0,rainCanvas.width,rainCanvas.height);for(let d of drops){d.fall();d.draw();}requestAnimationFrame(rainLoop);})();
+
+/* Modal logic */
+const openGameBtn=document.getElementById('openGame');const modal=document.getElementById('modalGame');
+const modalClose=document.getElementById('modalClose');const btnClose=document.getElementById('btnClose');
+function openModal(){modal.classList.add('open');modal.setAttribute('aria-hidden','false');startGame();}
+function closeModal(){modal.classList.remove('open');modal.setAttribute('aria-hidden','true');pauseGame();}
+openGameBtn.addEventListener('click',openModal);modalClose.addEventListener('click',closeModal);btnClose.addEventListener('click',closeModal);
+
+/* Snake Game */
+const canvas=document.getElementById('snakeCanvas');const ctx=canvas.getContext('2d');
+const scoreEl=document.getElementById('score');const speedInput=document.getElementById('speed');const speedVal=document.getElementById('speedVal');
+let grid=20,cols=Math.floor(canvas.width/grid),rows=Math.floor(canvas.height/grid);
+let snake=[{x:Math.floor(cols/2),y:Math.floor(rows/2)}];let dir={x:1,y:0};let food=null;let running=false;let intervalId=null;
+function placeFood(){food={x:Math.floor(Math.random()*cols),y:Math.floor(Math.random()*rows)};for(let s of snake){if(s.x===food.x&&s.y===food.y){placeFood();return;}}}
+function resetGame(){snake=[{x:Math.floor(cols/2),y:Math.floor(rows/2)}];dir={x:1,y:0};placeFood();scoreEl.innerText=0;}
+function draw(){ctx.fillStyle='#081016';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.fillStyle='#ff4757';ctx.fillRect(food.x*grid+2,food.y*grid+2,grid-4,grid-4);for(let i=0;i<snake.length;i++){const s=snake[i];ctx.fillStyle=i===0?'#f6f7f9':'#9aa7ad';ctx.fillRect(s.x*grid+1,s.y*grid+1,grid-2,grid-2);}}
+function update(){const head={x:snake[0].x+dir.x,y:snake[0].y+dir.y};if(head.x<0)head.x=cols-1;if(head.x>=cols)head.x=0;if(head.y<0)head.y=rows-1;if(head.y>=rows)head.y=0;for(let i=0;i<snake.length;i++){if(snake[i].x===head.x&&snake[i].y===head.y){resetGame();return;}}snake.unshift(head);if(head.x===food.x&&head.y===food.y){scoreEl.innerText=parseInt(scoreEl.innerText)+1;placeFood();}else{snake.pop();}}
+function gameLoop(){update();draw();}
+function startGame(){if(!food)placeFood();if(!running){running=true;intervalId=setInterval(gameLoop,1000/parseInt(speedInput.value));}}
+function pauseGame(){if(running){running=false;clearInterval(intervalId);intervalId=null;}}
+function restartGame(){resetGame();pauseGame();startGame();}
+document.getElementById('btnPlayPause').addEventListener('click',()=>{if(running)pauseGame();else startGame();});
+document.getElementById('btnRestart').addEventListener('click',restartGame);
+speedInput.addEventListener('input',()=>{speedVal.innerText=speedInput.value;if(running){clearInterval(intervalId);intervalId=setInterval(gameLoop,1000/parseInt(speedInput.value));}});
+window.addEventListener('keydown',(e)=>{if(!modal.classList.contains('open'))return;const k=e.key;if(k==='ArrowUp'||k==='w'||k==='W'){if(dir.y!==1)dir={x:0,y:-1}}if(k==='ArrowDown'||k==='s'||k==='S'){if(dir.y!==-1)dir={x:0,y:1}}if(k==='ArrowLeft'||k==='a'||k==='A'){if(dir.x!==1)dir={x:-1,y:0}}if(k==='ArrowRight'||k==='d'||k==='D'){if(dir.x!==-1)dir={x:1,y:0}}if(k===' '){if(running)pauseGame();else startGame();}});
+resetGame();draw();
+
+/* Feedback gửi Discord */
+document.getElementById('sendFeedback').addEventListener('click',async()=>{
+  const input=document.getElementById('feedbackInput');
+  const status=document.getElementById('feedbackStatus');
+  const message=input.value.trim();
+  if(!message){status.innerText="⚠️ Vui lòng nhập góp ý.";status.style.color="#ff5a6b";return;}
+  status.innerText="⏳ Đang gửi...";status.style.color="#ccc";
+  try{
+    const res=await fetch("https://discord.com/api/webhooks/1422196172847710301/RPn3PaFbGpiEOPMa_BhqG8oap_DEKSAeeNb4WUb141afUlTEeClO33OV-XlZAdIm3qtp",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({content:`📩 Feedback mới từ trang Bio:\n${message}`})
     });
-
-    function drawGame(){
-      ctx.fillStyle = "#000";
-      ctx.fillRect(0,0,canvas.width,canvas.height);
-
-      for(let i=0;i<snake.length;i++){
-        ctx.fillStyle = (i==0) ? "#23a6d5" : "#17778a";
-        ctx.fillRect(snake[i].x, snake[i].y, box, box);
-      }
-
-      ctx.fillStyle = "red";
-      ctx.fillRect(food.x, food.y, box, box);
-
-      let snakeX = snake[0].x;
-      let snakeY = snake[0].y;
-
-      if(direction=="LEFT") snakeX -= box;
-      if(direction=="UP") snakeY -= box;
-      if(direction=="RIGHT") snakeX += box;
-      if(direction=="DOWN") snakeY += box;
-
-      if(snakeX == food.x && snakeY == food.y){
-        food = {
-          x: Math.floor(Math.random()*19+1) * box,
-          y: Math.floor(Math.random()*19+1) * box
-        };
-      } else {
-        snake.pop();
-      }
-
-      let newHead = {x: snakeX, y: snakeY};
-
-      if(
-        snakeX < 0 || snakeY < 0 ||
-        snakeX >= canvas.width || snakeY >= canvas.height ||
-        snake.some(seg => seg.x==newHead.x && seg.y==newHead.y)
-      ){
-        clearInterval(game);
-        alert("Game Over!");
-      }
-
-      snake.unshift(newHead);
-    }
-    let game = setInterval(drawGame,100);
-
-    /* ===================== Feedback gửi Discord ===================== */
-    document.getElementById('sendFeedback').addEventListener('click', async () => {
-      const input = document.getElementById('feedbackInput');
-      const status = document.getElementById('feedbackStatus');
-      const message = input.value.trim();
-      if(!message){
-        status.innerText = "⚠️ Vui lòng nhập góp ý trước khi gửi.";
-        status.style.color = "#ff5a6b";
-        return;
-      }
-
-      status.innerText = "⏳ Đang gửi...";
-      status.style.color = "#ccc";
-
-      try {
-        const res = await fetch("https://discord.com/api/webhooks/1422196172847710301/RPn3PaFbGpiEOPMa_BhqG8oap_DEKSAeeNb4WUb141afUlTEeClO33OV-XlZAdIm3qtp", {
-          method: "POST",
-          headers: {"Content-Type":"application/json"},
-          body: JSON.stringify({
-            content: `📩 nè em ơi:\n${message}`
-          })
-        });
-
-        if(res.ok){
-          status.innerText = "✅ Gửi góp ý thành công!";
-          status.style.color = "#4caf50";
-          input.value = "";
-        } else {
-          status.innerText = "❌ Lỗi khi gửi góp ý.";
-          status.style.color = "#ff5a6b";
-        }
-      } catch(err){
-        status.innerText = "⚠️ Không thể kết nối đến server.";
-        status.style.color = "#ff9800";
-      }
-    });
-  </script>
+    if(res.ok){status.innerText="✅ Gửi góp ý thành công!";status.style.color="#4caf50";input.value="";}
+    else{status.innerText="❌ Lỗi khi gửi góp ý.";status.style.color="#ff5a6b";}
+  }catch(err){status.innerText="⚠️ Không thể kết nối server.";status.style.color="#ff9800";}
+});
+</script>
 </body>
 </html>
